@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
@@ -7,6 +8,10 @@ namespace DAL.Data
     public class DBContext : DbContext
     {
         private readonly string _conStr;
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<Material> Materials { get; set; }
+
         public DBContext()
         {
             var builder = new ConfigurationBuilder();
