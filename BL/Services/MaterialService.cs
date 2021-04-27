@@ -22,13 +22,51 @@ namespace BL.Services
         {
             Material material = new Material
             {
-                Name = materialDTO.Name,
-                Content = materialDTO.Content,
+                Name        = materialDTO.Name,
+                Content    = materialDTO.Content,
                 DateCreate = materialDTO.DateCreate,
             };
 
             _unitOfWork.Materials.Create(material);
             _unitOfWork.Save();
+        }
+
+        public IEnumerable<MaterialDTO> GetMaterials()
+        {
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Material, MaterialDTO>()).CreateMapper();
+            return mapper.Map<IEnumerable<Material>, List<MaterialDTO>>(_unitOfWork.Materials.GetAll());
+        }
+
+        public MaterialDTO GetMaterial(Guid id)
+        {
+            //TODO: Exception
+            //if (id == null)
+            //    throw new ValidationException("Не установлено id товара", "");
+            //if (product == null)
+            //    throw new ValidationException("Товар не найден", "");
+            var material = _unitOfWork.Materials.Get(id);
+            return new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, };
+        }
+
+        public void Update(MaterialDTO materialDTO)
+        {
+
+            Material dbEntry = _unitOfWork.Materials.Find(materialDTO.Id);
+            if (dbEntry != null)
+            {
+                dbEntry.Name        = materialDTO.Name;
+                dbEntry.Content    = materialDTO.Content;
+                dbEntry.DateCreate       = materialDTO.DateCreate;
+            }
+            _unitOfWork.Materials.Update(dbEntry);
+            _unitOfWork.Save();
+        }
+
+        public MaterialDTO Find(Guid id)
+        {
+            var material = _unitOfWork.Materials.Find(id);
+            return new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, };
+
         }
 
         public MaterialDTO Delete(Guid id)
@@ -43,35 +81,10 @@ namespace BL.Services
 
         }
 
-        public MaterialDTO Find(Guid id)
-        {
-            var material = _unitOfWork.Materials.Find(id);
-            return new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, };
-        }
-
-        public MaterialDTO GetMaterial(Guid id)
-        {
-            var material = _unitOfWork.Materials.Get(id);
-            return new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, };
-        }
-
-        public IEnumerable<MaterialDTO> GetMaterials()
-        {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Material, MaterialDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<Material>, List<MaterialDTO>>(_unitOfWork.Materials.GetAll());
-        }
-
-        public void Update(MaterialDTO materialDTO)
-        {
-            Material dbEntry = _unitOfWork.Materials.Find(materialDTO.Id);
-            if (dbEntry != null)
-            {
-                dbEntry.Name = materialDTO.Name;
-                dbEntry.Content = materialDTO.Content;
-                dbEntry.DateCreate = materialDTO.DateCreate;
-            }
-            _unitOfWork.Materials.Update(dbEntry);
-            _unitOfWork.Save();
-        }
+        //TODO:
+        //public void Dispose()
+        //{
+        //    _unitOfWork.Dispose();
+        //}
     }
 }

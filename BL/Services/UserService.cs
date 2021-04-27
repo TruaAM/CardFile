@@ -19,7 +19,7 @@ namespace BL.Services
         private readonly IEmailService _email;
 
         public UserService()
-        {
+        {    
             _unitOfWork = new UnitOfWork();
             _password = new PasswordService();
             _email = new EmailService();
@@ -29,7 +29,16 @@ namespace BL.Services
         {
             var user = _unitOfWork.Users.Get(id);
 
-            return new UserDTO { Email = user.Email, Password = user.Password };
+            return new UserDTO 
+            { 
+                Name = user.Name, 
+                Surname = user.Surname, 
+                Role = user.Role, 
+                Login = user.Login, 
+                Email = user.Email, 
+                Password = user.Password, 
+                DateRegist = user.DateRegist 
+            };
         }
 
         public bool IsPasswordSame(string password)
@@ -56,13 +65,26 @@ namespace BL.Services
                 }
             }
             return true;
+        }       
+
+        public UserDTO GetUserLog(string email, string password)
+        {
+            IEnumerable<UserDTO> userDtos = GetUsers();
+            foreach (UserDTO userDto in userDtos)
+            {
+                if (userDto.Email == email && userDto.Password == _password.GetHashString(password))
+                {
+                    return userDto;
+                }
+            }
+            return null;
         }
 
         public IEnumerable<UserDTO> GetUsers()
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<User, UserDTO>()).CreateMapper();
             return mapper.Map<IEnumerable<User>, List<UserDTO>>(_unitOfWork.Users.GetAll());
-        }
+        }     
 
         public void SaveUser(UserDTO userDTO)
         {
@@ -77,9 +99,13 @@ namespace BL.Services
 
             User user = new User
             {
-                RoleName = userDTO.RoleName,
+                Name = userDTO.Name,
+                Surname = userDTO.Surname,
+                Role = userDTO.Role,
+                Login = userDTO.Login,
                 Email = userDTO.Email,
                 Password = _password.GetHashString(userDTO.Password),
+                DateRegist = userDTO.DateRegist
             };
 
             _unitOfWork.Users.Create(user);

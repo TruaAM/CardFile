@@ -1,0 +1,55 @@
+﻿@model PL.Models.MaterialViewModel
+
+@{
+    ViewBag.Title = "Admin panel: Add material";
+}
+
+<h1>Admin Panel</h1>
+
+<div class="panel">
+
+    <div class="panel-heading">
+        <h3>Add Material</h3>
+    </div>
+
+    @using (Html.BeginForm("Create", "Admin",
+       FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="panel-body">
+            @Html.HiddenFor(m => m.Id)
+            @foreach (var property in ViewData.ModelMetadata.Properties)
+            {
+                switch (property.PropertyName)
+                {
+                    case "Id":
+                        break;
+
+                    default:
+                        <div class="form-group">
+                            <label>@(property.DisplayName ?? property.PropertyName)</label>
+                            @if (property.PropertyName == "Description")
+                            {
+                                @Html.TextArea(property.PropertyName, null,
+                                 new { @class = "form-control", rows = 5 })
+                            }
+                            else
+                            {
+                                @Html.TextBox(property.PropertyName, null,
+                                 new { @class = "form-control" })
+                            }
+                            <strong>@Html.ValidationMessage(property.PropertyName)</strong>
+                        </div>
+                        break;
+                }
+            }
+
+            <div class="panel-footer">
+                <input type="submit" value="Add material" class="btn btn-primary" />
+                @Html.ActionLink("Cancel and back to list", "Index", null, new
+                {
+                    @class = "btn btn-secondary"
+                })
+            </div>
+        </div>
+    }
+</div>

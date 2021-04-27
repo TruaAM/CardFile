@@ -8,48 +8,53 @@ using System.Linq;
 
 namespace DAL.Repositories
 {
-    public class MaterialRepository : IRepository<Material>
-    {
-        private DBContext db;
+	public class MaterialRepository : IRepository<Material>
+	{
+		private DBContext db;
 
-        public MaterialRepository(DBContext context)
-        {
-            this.db = context;
-        }
+		public MaterialRepository(DBContext context)
+		{
+			this.db = context;
+		}
 
-        public void Create(Material material)
-        {
-            db.Materials.Add(material);
-        }
+		public IEnumerable<Material> GetAll()
+		{
+			return db.Materials.ToList();
+		}
 
-        public void Delete(Guid id)
-        {
-            Material material = db.Materials.Find(id);
-            if (material != null)
-            {
-                db.Materials.Remove(material);
-            }
-        }
+		public Material Get(Guid id)
+		{
+			return db.Materials.Find(id);
+		}
 
-        public Material Get(Guid id)
-        {
-            return db.Materials.Find(id);
-        }
+		public void Create(Material product)
+		{
+			db.Materials.Add(product);
+		}
 
-        public IEnumerable<Material> GetAll()
-        {
-            return db.Materials.ToList();
-        }
+		public void Update(Material product)
+		{
+			db.Entry(product).State = EntityState.Modified;
+		}
 
-        public void Update(Material material)
-        {
-            db.Entry(material).State = EntityState.Modified;
-        }
+		//public IEnumerable<Product> Find(Func<Product, Boolean> predicate)
+		//{
+			//return db.Products.Where(predicate).ToList();
+		//}
 
-        public Material Find(Guid id)
-        {
-            var resultData = db.Materials.Where(p => p.Id == id).FirstOrDefault();
-            return resultData;
-        }
-    }
+		public Material Find(Guid id)
+		{
+			var resultData = db.Materials.Where(p => p.Id == id).FirstOrDefault();
+			return resultData;
+		}
+
+		public void Delete(Guid id)
+		{
+			Material product = db.Materials.Find(id);
+			if (product != null)
+			{
+				db.Materials.Remove(product);
+			}
+		}
+	}
 }

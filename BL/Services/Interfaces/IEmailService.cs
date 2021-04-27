@@ -1,5 +1,4 @@
-﻿
-namespace BL.Services.Interfaces
+﻿namespace BL.Services.Interfaces
 {
     public interface IEmailService
     {

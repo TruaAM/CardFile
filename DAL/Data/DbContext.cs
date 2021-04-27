@@ -21,6 +21,7 @@ namespace DAL.Data
             _conStr = config["ConnectionString"];
             Database.EnsureCreated();
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_conStr);
