@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using BL.DTO;
 using BL.Services.Interfaces;
@@ -19,6 +20,7 @@ namespace BL.Services
         }
 
         public void Create(MaterialDTO materialDTO)
+        //public async void Create(MaterialDTO materialDTO)
         {
             Material material = new Material
             {
@@ -27,6 +29,12 @@ namespace BL.Services
                 DateCreate = materialDTO.DateCreate,
             };
 
+            /*
+            await Task.Run(() => {
+                _unitOfWork.Materials.Create(material);
+                _unitOfWork.Save();
+            });
+            */
             _unitOfWork.Materials.Create(material);
             _unitOfWork.Save();
         }
