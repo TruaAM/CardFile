@@ -1,12 +1,13 @@
 ﻿using Core.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<User> Users { get; }
-        IRepository<Material> Materials { get; }
-        void Save();
+        IUserRepository Users { get; }
+        IMaterialRepository Materials { get; }
+        Task<int> SaveAsync();
     }
 }

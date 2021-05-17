@@ -1,16 +1,18 @@
-﻿using System;
+﻿using Core.Models;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<TEntity> where TEntity : BaseEntity
     {
-        IEnumerable<T> GetAll();
-        T Get(Guid id);
-        T Find(Guid id);
-        void Create(T item);
-        void Update(T item);
-        void Delete(Guid id);
-        //IEnumerable<T> Find(Func<T, Boolean> predicate);
+        IEnumerable<TEntity> GetAll();
+        Task<TEntity> GetAsync(Guid id);
+        Task<TEntity> FindAsync(Guid id);
+        Task CreateAsync(TEntity item);
+        void Update(TEntity item);
+        void Delete(TEntity entity);
+        Task DeleteByIdAsync(Guid id);
     }
 }

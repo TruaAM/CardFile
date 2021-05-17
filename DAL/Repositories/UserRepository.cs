@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class UserRepository : IRepository<User>
+    public class UserRepository : IUserRepository
     {
         private DBContext db;
 
@@ -17,23 +18,29 @@ namespace DAL.Repositories
             this.db = context;
         }
 
-        public void Create(User user)
+        public Task CreateAsync(User user)
         {
-            db.Users.Add(user);
+            return Task.FromResult(db.Users.Add(user));
         }
 
-        public void Delete(Guid id)
+        public void Delete(User user)
+        {
+            db.Users.Remove(user);
+        }
+
+        public Task DeleteByIdAsync(Guid id)
         {
             User user = db.Users.Find(id);
             if (user != null)
             {
-                db.Users.Remove(user);
+                return Task.FromResult(db.Users.Remove(user));
             }
+            return null;
         }
 
-        public User Get(Guid id)
+        public Task<User> GetAsync(Guid id)
         {
-            return db.Users.Find(id);
+            return Task.FromResult(db.Users.Find(id));
         }
 
         public IEnumerable<User> GetAll()
@@ -46,10 +53,10 @@ namespace DAL.Repositories
             db.Entry(user).State = EntityState.Modified;
         }
 
-        public User Find(Guid id)
+        public Task<User> FindAsync(Guid id)
         {
             var resultData = db.Users.Where(p => p.Id == id).FirstOrDefault();
-            return resultData;
+            return Task.FromResult(resultData);
         }
     }
 }
