@@ -37,7 +37,7 @@ namespace PL.Controllers
 
         public ViewResult Edit(Guid Id)
         {
-            MaterialDTO materialDto = _materialService.Find(Id);
+            MaterialDTO materialDto = _materialService.FindByIdAsync(Id).Result;
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<MaterialDTO, MaterialViewModel>()).CreateMapper();
             var material = mapper.Map<MaterialDTO, MaterialViewModel>(materialDto);
             return View(material);
@@ -47,7 +47,7 @@ namespace PL.Controllers
         public ActionResult Edit(MaterialViewModel materialViewModel)
         {
 
-            MaterialDTO materialDto = _materialService.Find(materialViewModel.Id);
+            MaterialDTO materialDto = _materialService.FindByIdAsync(materialViewModel.Id).Result;
             {
                 materialDto.Id         = materialViewModel.Id;
                 materialDto.Name       = materialViewModel.Name;
@@ -58,7 +58,7 @@ namespace PL.Controllers
 
             if (ModelState.IsValid)
             {
-                _materialService.Update(materialDto);
+                _materialService.UpdateAsync(materialDto);
                 TempData["message"] = string.Format("Changes in the  \"{0}\" have been saved", materialDto.Name);
                 return RedirectToAction("Index");
             }
@@ -89,12 +89,11 @@ namespace PL.Controllers
                     //DateCreate = DateTime.Now,
                 };
 
-				//TODO: установка ID не помогает пройти ModelState.IsValid
 				materialDto.Id = Guid.NewGuid();
 
 				if (ModelState.IsValid)
 				{
-                    _materialService.Create(materialDto);
+                    _materialService.AddAsync(materialDto);
                 TempData["message"] = string.Format("The  \"{0}\" has been added", materialDto.Name);
                 return RedirectToAction("Index");
 			    }
@@ -104,7 +103,6 @@ namespace PL.Controllers
 			    }
 		    }
 
-            //TODO: Exeption
             catch (/*Validation*/Exception ex)
             {
                 //ModelState.AddModelError(ex.Property, ex.Message);
@@ -115,12 +113,15 @@ namespace PL.Controllers
         [HttpPost]
         public ActionResult Delete(Guid id)
         {
-             var deletedMaterial = _materialService.Delete(id);
+             string nameOfMaterial = _materialService.FindByIdAsync(id).Result.Name;
+             
+            var deletedMaterial = _materialService.DeleteByIdAsync(id);
+
              if (deletedMaterial != null)
              {
-                TempData["message"] = string.Format("The \"{0}\" has been deleted", deletedMaterial.Name);
+                TempData["message"] = string.Format("The \"{0}\" has been deleted", nameOfMaterial);
              }
-        return RedirectToAction("Index");
+             return RedirectToAction("Index");
         }     
     }
 }

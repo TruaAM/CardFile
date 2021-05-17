@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BL.DTO;
 
 namespace BL.Services.Interfaces
@@ -8,14 +9,14 @@ namespace BL.Services.Interfaces
 	{
 		IEnumerable<MaterialDTO> GetMaterials();
 
-		MaterialDTO GetMaterial(Guid id);
+		Task<MaterialDTO> FindByIdAsync(Guid id);
 
-		void Create(MaterialDTO materialDTO);
+		Task AddAsync(MaterialDTO materialDTO);
 
-		void Update(MaterialDTO materialDTO);
+		Task UpdateAsync(MaterialDTO materialDTO);
 
-		MaterialDTO Find(Guid id);
+		Task DeleteByIdAsync(Guid id);
 
-		MaterialDTO Delete(Guid id);
+		Task<MaterialDTO> GetByIdAsync(Guid id);
 	}
 }

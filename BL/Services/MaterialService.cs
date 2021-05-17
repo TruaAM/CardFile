@@ -19,8 +19,7 @@ namespace BL.Services
             _unitOfWork = new UnitOfWork();
         }
 
-        public void Create(MaterialDTO materialDTO)
-        //public async void Create(MaterialDTO materialDTO)
+        public Task AddAsync(MaterialDTO materialDTO)
         {
             Material material = new Material
             {
@@ -29,14 +28,8 @@ namespace BL.Services
                 DateCreate = materialDTO.DateCreate,
             };
 
-            /*
-            await Task.Run(() => {
-                _unitOfWork.Materials.Create(material);
-                _unitOfWork.Save();
-            });
-            */
             _unitOfWork.Materials.CreateAsync(material);
-            _unitOfWork.SaveAsync();
+            return Task.FromResult(_unitOfWork.SaveAsync());
         }
 
         public IEnumerable<MaterialDTO> GetMaterials()
@@ -45,7 +38,7 @@ namespace BL.Services
             return mapper.Map<IEnumerable<Material>, List<MaterialDTO>>(_unitOfWork.Materials.GetAll());
         }
 
-        public MaterialDTO GetMaterial(Guid id)
+        public Task<MaterialDTO> GetByIdAsync(Guid id)
         {
             //TODO: Exception
             //if (id == null)
@@ -53,10 +46,10 @@ namespace BL.Services
             //if (product == null)
             //    throw new ValidationException("Товар не найден", "");
             var material = _unitOfWork.Materials.GetAsync(id).Result;
-            return new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, };
+            return Task.FromResult(new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, });
         }
 
-        public void Update(MaterialDTO materialDTO)
+        public Task UpdateAsync(MaterialDTO materialDTO)
         {
 
             Material dbEntry = _unitOfWork.Materials.FindAsync(materialDTO.Id).Result;
@@ -67,26 +60,20 @@ namespace BL.Services
                 dbEntry.DateCreate       = materialDTO.DateCreate;
             }
             _unitOfWork.Materials.Update(dbEntry);
-            _unitOfWork.SaveAsync();
+            return Task.FromResult(_unitOfWork.SaveAsync());
         }
 
-        public MaterialDTO Find(Guid id)
+        public Task<MaterialDTO> FindByIdAsync(Guid id)
         {
             var material = _unitOfWork.Materials.FindAsync(id).Result;
-            return new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, };
+            return Task.FromResult(new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, });
 
         }
 
-        public MaterialDTO Delete(Guid id)
+        public Task DeleteByIdAsync(Guid id)
         {
-            var material = _unitOfWork.Materials.FindAsync(id).Result;
-            if (material != null)
-            {
-                _unitOfWork.Materials.DeleteByIdAsync(material.Id);
-                _unitOfWork.SaveAsync();
-            }
-            return new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, };
-
+            _unitOfWork.Materials.DeleteByIdAsync(id);
+            return Task.FromResult(_unitOfWork.SaveAsync());
         }
     }
 }
