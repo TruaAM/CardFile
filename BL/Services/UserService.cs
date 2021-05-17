@@ -27,7 +27,7 @@ namespace BL.Services
 
         public UserDTO GetUser(Guid id)
         {
-            var user = _unitOfWork.Users.Get(id);
+            var user = _unitOfWork.Users.GetAsync(id).Result;
 
             return new UserDTO 
             { 
@@ -108,9 +108,9 @@ namespace BL.Services
                 DateRegist = userDTO.DateRegist
             };
 
-            _unitOfWork.Users.Create(user);
+            _unitOfWork.Users.CreateAsync(user);
 
-            _unitOfWork.Save();
+            _unitOfWork.SaveAsync();
         }
     }
 }

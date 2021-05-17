@@ -35,8 +35,8 @@ namespace BL.Services
                 _unitOfWork.Save();
             });
             */
-            _unitOfWork.Materials.Create(material);
-            _unitOfWork.Save();
+            _unitOfWork.Materials.CreateAsync(material);
+            _unitOfWork.SaveAsync();
         }
 
         public IEnumerable<MaterialDTO> GetMaterials()
@@ -52,14 +52,14 @@ namespace BL.Services
             //    throw new ValidationException("Не установлено id товара", "");
             //if (product == null)
             //    throw new ValidationException("Товар не найден", "");
-            var material = _unitOfWork.Materials.Get(id);
+            var material = _unitOfWork.Materials.GetAsync(id).Result;
             return new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, };
         }
 
         public void Update(MaterialDTO materialDTO)
         {
 
-            Material dbEntry = _unitOfWork.Materials.Find(materialDTO.Id);
+            Material dbEntry = _unitOfWork.Materials.FindAsync(materialDTO.Id).Result;
             if (dbEntry != null)
             {
                 dbEntry.Name        = materialDTO.Name;
@@ -67,32 +67,26 @@ namespace BL.Services
                 dbEntry.DateCreate       = materialDTO.DateCreate;
             }
             _unitOfWork.Materials.Update(dbEntry);
-            _unitOfWork.Save();
+            _unitOfWork.SaveAsync();
         }
 
         public MaterialDTO Find(Guid id)
         {
-            var material = _unitOfWork.Materials.Find(id);
+            var material = _unitOfWork.Materials.FindAsync(id).Result;
             return new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, };
 
         }
 
         public MaterialDTO Delete(Guid id)
         {
-            var material = _unitOfWork.Materials.Find(id);
+            var material = _unitOfWork.Materials.FindAsync(id).Result;
             if (material != null)
             {
-                _unitOfWork.Materials.Delete(material.Id);
-                _unitOfWork.Save();
+                _unitOfWork.Materials.DeleteByIdAsync(material.Id);
+                _unitOfWork.SaveAsync();
             }
             return new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, };
 
         }
-
-        //TODO:
-        //public void Dispose()
-        //{
-        //    _unitOfWork.Dispose();
-        //}
     }
 }

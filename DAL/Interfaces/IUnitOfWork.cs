@@ -1,10 +1,9 @@
-﻿using Core.Models;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork
     {
         IUserRepository Users { get; }
         IMaterialRepository Materials { get; }
