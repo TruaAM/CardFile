@@ -35,7 +35,7 @@ namespace PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _userService.GetUserLog(model.Email, model.Password);
+                var user = _userService.GetUserLog(model.Email, model.Password).Result;
                 if (user != null)
                 {
                     await Authenticate(user);
@@ -95,7 +95,7 @@ namespace PL.Controllers
 
                 var user = _userService.GetUserLog(model.Email, model.Password);
 
-                await Authenticate(user);
+                await Authenticate(user.Result);
 
                 return RedirectToAction("Index", "Home");
                 //return RedirectToAction("Login", "Account");

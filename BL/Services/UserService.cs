@@ -7,6 +7,7 @@ using DAL.Interfaces;
 using DAL.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BL.Services
 {
@@ -25,20 +26,21 @@ namespace BL.Services
             _email = new EmailService();
         }
 
-        public UserDTO GetUser(Guid id)
+        public Task<UserDTO> GetUser(Guid id)
         {
             var user = _unitOfWork.Users.GetAsync(id).Result;
 
-            return new UserDTO 
-            { 
-                Name = user.Name, 
-                Surname = user.Surname, 
-                Role = user.Role, 
-                Login = user.Login, 
-                Email = user.Email, 
-                Password = user.Password, 
-                DateRegist = user.DateRegist 
-            };
+            return Task.FromResult(new UserDTO
+            {
+                Name = user.Name,
+                Surname = user.Surname,
+                Role = user.Role,
+                Login = user.Login,
+                Email = user.Email,
+                Password = user.Password,
+                DateRegist = user.DateRegist
+            }
+            );
         }
 
         public bool IsPasswordSame(string password)
@@ -67,14 +69,14 @@ namespace BL.Services
             return true;
         }       
 
-        public UserDTO GetUserLog(string email, string password)
+        public Task<UserDTO> GetUserLog(string email, string password)
         {
             IEnumerable<UserDTO> userDtos = GetUsers();
             foreach (UserDTO userDto in userDtos)
             {
                 if (userDto.Email == email && userDto.Password == _password.GetHashString(password))
                 {
-                    return userDto;
+                    return Task.FromResult(userDto);
                 }
             }
             return null;
@@ -86,7 +88,7 @@ namespace BL.Services
             return mapper.Map<IEnumerable<User>, List<UserDTO>>(_unitOfWork.Users.GetAll());
         }     
 
-        public void SaveUser(UserDTO userDTO)
+        public Task SaveUser(UserDTO userDTO)
         {
             if (!_email.ValideEmail(userDTO.Email))
             {
@@ -110,7 +112,7 @@ namespace BL.Services
 
             _unitOfWork.Users.CreateAsync(user);
 
-            _unitOfWork.SaveAsync();
+            return Task.FromResult(_unitOfWork.SaveAsync());
         }
     }
 }
