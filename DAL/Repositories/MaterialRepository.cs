@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-	public class MaterialRepository : IRepository<Material>
+	public class MaterialRepository : IMaterialRepository
 	{
 		private DBContext db;
 
@@ -22,14 +23,14 @@ namespace DAL.Repositories
 			return db.Materials.ToList();
 		}
 
-		public Material Get(Guid id)
+		public Task<Material> GetAsync(Guid id)
 		{
-			return db.Materials.Find(id);
+			return Task.FromResult(db.Materials.Find(id));
 		}
 
-		public void Create(Material product)
+		public Task CreateAsync(Material product)
 		{
-			db.Materials.Add(product);
+			return Task.FromResult(db.Materials.Add(product));
 		}
 
 		public void Update(Material product)
@@ -37,24 +38,26 @@ namespace DAL.Repositories
 			db.Entry(product).State = EntityState.Modified;
 		}
 
-		//public IEnumerable<Product> Find(Func<Product, Boolean> predicate)
-		//{
-			//return db.Products.Where(predicate).ToList();
-		//}
-
-		public Material Find(Guid id)
+		public Task<Material> FindAsync(Guid id)
 		{
 			var resultData = db.Materials.Where(p => p.Id == id).FirstOrDefault();
-			return resultData;
+			return Task.FromResult(resultData);
 		}
 
-		public void Delete(Guid id)
+		public void Delete(Material material)
 		{
-			Material product = db.Materials.Find(id);
-			if (product != null)
-			{
-				db.Materials.Remove(product);
-			}
+			db.Materials.Remove(material);
 		}
+
+		public Task DeleteByIdAsync(Guid id)
+		{
+			Material material = db.Materials.Find(id);
+			if (material != null)
+			{
+				return Task.FromResult(db.Materials.Remove(material));
+			}
+			return null;
+		}
+
 	}
 }

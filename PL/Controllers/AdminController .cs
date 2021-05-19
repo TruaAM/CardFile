@@ -7,6 +7,7 @@ using AutoMapper;
 using PL.Models;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace PL.Controllers
 {
@@ -37,17 +38,17 @@ namespace PL.Controllers
 
         public ViewResult Edit(Guid Id)
         {
-            MaterialDTO materialDto = _materialService.Find(Id);
+            MaterialDTO materialDto = _materialService.FindByIdAsync(Id).Result;
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<MaterialDTO, MaterialViewModel>()).CreateMapper();
             var material = mapper.Map<MaterialDTO, MaterialViewModel>(materialDto);
             return View(material);
         }
 
         [HttpPost]
-        public ActionResult Edit(MaterialViewModel materialViewModel)
+        public async Task<ActionResult> Edit(MaterialViewModel materialViewModel)
         {
 
-            MaterialDTO materialDto = _materialService.Find(materialViewModel.Id);
+            MaterialDTO materialDto = _materialService.FindByIdAsync(materialViewModel.Id).Result;
             {
                 materialDto.Id         = materialViewModel.Id;
                 materialDto.Name       = materialViewModel.Name;
@@ -58,9 +59,10 @@ namespace PL.Controllers
 
             if (ModelState.IsValid)
             {
-                _materialService.Update(materialDto);
+                await _materialService.UpdateAsync(materialDto);
                 TempData["message"] = string.Format("Changes in the  \"{0}\" have been saved", materialDto.Name);
-                return RedirectToAction("Index");
+                return View(materialViewModel);
+                //return RedirectToAction("Index");
             }
             else
             {
@@ -77,7 +79,7 @@ namespace PL.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(MaterialViewModel materialViewModel)
+        public async Task<ActionResult> Create(MaterialViewModel materialViewModel)
         {
             try
             {
@@ -89,14 +91,14 @@ namespace PL.Controllers
                     //DateCreate = DateTime.Now,
                 };
 
-				//TODO: установка ID не помогает пройти ModelState.IsValid
 				materialDto.Id = Guid.NewGuid();
 
 				if (ModelState.IsValid)
 				{
-                    _materialService.Create(materialDto);
-                TempData["message"] = string.Format("The  \"{0}\" has been added", materialDto.Name);
-                return RedirectToAction("Index");
+                    await _materialService.AddAsync(materialDto);
+                    TempData["message"] = string.Format("The  \"{0}\" has been added", materialDto.Name);
+                    return View(materialViewModel);
+                    //return RedirectToAction("Index");
 			    }
 				else
 			    {
@@ -104,7 +106,6 @@ namespace PL.Controllers
 			    }
 		    }
 
-            //TODO: Exeption
             catch (/*Validation*/Exception ex)
             {
                 //ModelState.AddModelError(ex.Property, ex.Message);
@@ -113,14 +114,15 @@ namespace PL.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(Guid id)
+        public async Task<ActionResult> Delete(Guid id)
         {
-             var deletedMaterial = _materialService.Delete(id);
-             if (deletedMaterial != null)
-             {
-                TempData["message"] = string.Format("The \"{0}\" has been deleted", deletedMaterial.Name);
-             }
-        return RedirectToAction("Index");
+             var material = await _materialService.FindByIdAsync(id);
+             
+             await _materialService.DeleteByIdAsync(id);
+
+             TempData["message"] = string.Format("The \"{0}\" has been deleted", material.Name);
+             
+             return RedirectToAction("Index");
         }     
     }
 }

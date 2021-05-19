@@ -7,6 +7,8 @@ using DAL.Interfaces;
 using DAL.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BL.Services
 {
@@ -25,59 +27,43 @@ namespace BL.Services
             _email = new EmailService();
         }
 
-        public UserDTO GetUser(Guid id)
+        public Task<UserDTO> GetUser(Guid id)
         {
-            var user = _unitOfWork.Users.Get(id);
+            var user = _unitOfWork.Users.GetAsync(id).Result;
 
-            return new UserDTO 
-            { 
-                Name = user.Name, 
-                Surname = user.Surname, 
-                Role = user.Role, 
-                Login = user.Login, 
-                Email = user.Email, 
-                Password = user.Password, 
-                DateRegist = user.DateRegist 
-            };
-        }
-
-        public bool IsPasswordSame(string password)
-        {
-            IEnumerable<UserDTO> userDtos = GetUsers();
-            foreach (UserDTO userDto in userDtos)
+            return Task.FromResult(new UserDTO
             {
-                if (userDto.Password == password)
-                {
-                    return true;
-                }
+                Name = user.Name,
+                Surname = user.Surname,
+                Role = user.Role,
+                Login = user.Login,
+                Email = user.Email,
+                Password = user.Password,
+                DateRegist = user.DateRegist
             }
-            return false;
+            );
         }
 
         public bool IsEmailFree(string email)
         {
             IEnumerable<UserDTO> userDtos = GetUsers();
-            foreach (UserDTO userDto in userDtos)
+            UserDTO userDto = userDtos.Where(user => user.Email == email).FirstOrDefault();
+            if (userDto != null)
             {
-                if (userDto.Email == email)
-                {
-                    return false;
-                }
+                return false;
             }
             return true;
         }       
 
-        public UserDTO GetUserLog(string email, string password)
+        public Task<UserDTO> GetUserLog(string email, string password)
         {
             IEnumerable<UserDTO> userDtos = GetUsers();
-            foreach (UserDTO userDto in userDtos)
+            UserDTO userDto = userDtos.Where(user => user.Email == email && user.Password == _password.GetHashString(password)).FirstOrDefault();
+            if (userDto != null)
             {
-                if (userDto.Email == email && userDto.Password == _password.GetHashString(password))
-                {
-                    return userDto;
-                }
+                return Task.FromResult(userDto);
             }
-            return null;
+            return Task.FromResult(userDto);
         }
 
         public IEnumerable<UserDTO> GetUsers()
@@ -86,7 +72,7 @@ namespace BL.Services
             return mapper.Map<IEnumerable<User>, List<UserDTO>>(_unitOfWork.Users.GetAll());
         }     
 
-        public void SaveUser(UserDTO userDTO)
+        public Task SaveUser(UserDTO userDTO)
         {
             if (!_email.ValideEmail(userDTO.Email))
             {
@@ -108,9 +94,9 @@ namespace BL.Services
                 DateRegist = userDTO.DateRegist
             };
 
-            _unitOfWork.Users.Create(user);
+            _unitOfWork.Users.CreateAsync(user);
 
-            _unitOfWork.Save();
+            return Task.FromResult(_unitOfWork.SaveAsync());
         }
     }
 }

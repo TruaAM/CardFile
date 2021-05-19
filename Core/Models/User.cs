@@ -2,10 +2,8 @@
 
 namespace Core.Models
 {
-    public class User
+    public class User : BaseEntity
     {
-        public Guid Id { set; get; }
-
         public string Name { set; get; }
 
         public string Surname { set; get; }

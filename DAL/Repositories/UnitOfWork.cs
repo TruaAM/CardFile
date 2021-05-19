@@ -2,6 +2,7 @@
 using DAL.Data;
 using DAL.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
@@ -16,7 +17,7 @@ namespace DAL.Repositories
             _db = new DBContext();
         }
 
-        public IRepository<User> Users
+        public IUserRepository Users
         {
             get
             {
@@ -28,7 +29,7 @@ namespace DAL.Repositories
             }
         }
 
-        public IRepository<Material> Materials
+        public IMaterialRepository Materials
         {
             get
             {
@@ -40,29 +41,10 @@ namespace DAL.Repositories
             }
         }
 
-        public void Save()
+        public Task<int> SaveAsync()
         {
-            _db.SaveChanges();
+            return _db.SaveChangesAsync();
         }
 
-        private bool disposed = false;
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    _db.Dispose();
-                }
-                this.disposed = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
     }
 }
