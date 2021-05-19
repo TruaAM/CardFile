@@ -13,8 +13,6 @@ namespace BL.Services.Interfaces
 
         public Task SaveUser(UserDTO userDTO);
 
-        bool IsPasswordSame(string password);
-
         bool IsEmailFree(string email);
 
         Task<UserDTO> GetUserLog(string email, string password);

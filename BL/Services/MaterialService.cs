@@ -40,11 +40,6 @@ namespace BL.Services
 
         public Task<MaterialDTO> GetByIdAsync(Guid id)
         {
-            //TODO: Exception
-            //if (id == null)
-            //    throw new ValidationException("Не установлено id товара", "");
-            //if (product == null)
-            //    throw new ValidationException("Товар не найден", "");
             var material = _unitOfWork.Materials.GetAsync(id).Result;
             return Task.FromResult(new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, });
         }

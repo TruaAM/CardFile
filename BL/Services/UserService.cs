@@ -7,6 +7,7 @@ using DAL.Interfaces;
 using DAL.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BL.Services
@@ -43,28 +44,13 @@ namespace BL.Services
             );
         }
 
-        public bool IsPasswordSame(string password)
-        {
-            IEnumerable<UserDTO> userDtos = GetUsers();
-            foreach (UserDTO userDto in userDtos)
-            {
-                if (userDto.Password == password)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public bool IsEmailFree(string email)
         {
             IEnumerable<UserDTO> userDtos = GetUsers();
-            foreach (UserDTO userDto in userDtos)
+            UserDTO userDto = userDtos.Where(user => user.Email == email).FirstOrDefault();
+            if (userDto != null)
             {
-                if (userDto.Email == email)
-                {
-                    return false;
-                }
+                return false;
             }
             return true;
         }       
@@ -72,14 +58,12 @@ namespace BL.Services
         public Task<UserDTO> GetUserLog(string email, string password)
         {
             IEnumerable<UserDTO> userDtos = GetUsers();
-            foreach (UserDTO userDto in userDtos)
+            UserDTO userDto = userDtos.Where(user => user.Email == email && user.Password == _password.GetHashString(password)).FirstOrDefault();
+            if (userDto != null)
             {
-                if (userDto.Email == email && userDto.Password == _password.GetHashString(password))
-                {
-                    return Task.FromResult(userDto);
-                }
+                return Task.FromResult(userDto);
             }
-            return null;
+            return Task.FromResult(userDto);
         }
 
         public IEnumerable<UserDTO> GetUsers()
