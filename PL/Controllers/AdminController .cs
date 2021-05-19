@@ -61,7 +61,8 @@ namespace PL.Controllers
             {
                 await _materialService.UpdateAsync(materialDto);
                 TempData["message"] = string.Format("Changes in the  \"{0}\" have been saved", materialDto.Name);
-                return RedirectToAction("Index");
+                return View(materialViewModel);
+                //return RedirectToAction("Index");
             }
             else
             {
@@ -96,7 +97,8 @@ namespace PL.Controllers
 				{
                     await _materialService.AddAsync(materialDto);
                     TempData["message"] = string.Format("The  \"{0}\" has been added", materialDto.Name);
-                    return RedirectToAction("Index");
+                    return View(materialViewModel);
+                    //return RedirectToAction("Index");
 			    }
 				else
 			    {
