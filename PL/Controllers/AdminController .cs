@@ -7,6 +7,7 @@ using AutoMapper;
 using PL.Models;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace PL.Controllers
 {
@@ -44,7 +45,7 @@ namespace PL.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(MaterialViewModel materialViewModel)
+        public async Task<ActionResult> Edit(MaterialViewModel materialViewModel)
         {
 
             MaterialDTO materialDto = _materialService.FindByIdAsync(materialViewModel.Id).Result;
@@ -58,7 +59,7 @@ namespace PL.Controllers
 
             if (ModelState.IsValid)
             {
-                _materialService.UpdateAsync(materialDto);
+                await _materialService.UpdateAsync(materialDto);
                 TempData["message"] = string.Format("Changes in the  \"{0}\" have been saved", materialDto.Name);
                 return RedirectToAction("Index");
             }
@@ -77,7 +78,7 @@ namespace PL.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(MaterialViewModel materialViewModel)
+        public async Task<ActionResult> Create(MaterialViewModel materialViewModel)
         {
             try
             {
@@ -93,9 +94,9 @@ namespace PL.Controllers
 
 				if (ModelState.IsValid)
 				{
-                    _materialService.AddAsync(materialDto);
-                TempData["message"] = string.Format("The  \"{0}\" has been added", materialDto.Name);
-                return RedirectToAction("Index");
+                    await _materialService.AddAsync(materialDto);
+                    TempData["message"] = string.Format("The  \"{0}\" has been added", materialDto.Name);
+                    return RedirectToAction("Index");
 			    }
 				else
 			    {
@@ -111,16 +112,14 @@ namespace PL.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(Guid id)
+        public async Task<ActionResult> Delete(Guid id)
         {
-             string nameOfMaterial = _materialService.FindByIdAsync(id).Result.Name;
+             var material = await _materialService.FindByIdAsync(id);
              
-            var deletedMaterial = _materialService.DeleteByIdAsync(id);
+             await _materialService.DeleteByIdAsync(id);
 
-             if (deletedMaterial != null)
-             {
-                TempData["message"] = string.Format("The \"{0}\" has been deleted", nameOfMaterial);
-             }
+             TempData["message"] = string.Format("The \"{0}\" has been deleted", material.Name);
+             
              return RedirectToAction("Index");
         }     
     }

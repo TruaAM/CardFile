@@ -91,14 +91,14 @@ namespace PL.Controllers
                     DateRegist = DateTime.Now,
                 };
 
-                _userService.SaveUser(userDto);
+                await _userService.SaveUser(userDto);
 
-                var user = _userService.GetUserLog(model.Email, model.Password);
+                //var user = _userService.GetUserLog(model.Email, model.Password);
 
-                await Authenticate(user.Result);
+                //await Authenticate(user.Result);
 
-                return RedirectToAction("Index", "Home");
-                //return RedirectToAction("Login", "Account");
+                //return RedirectToAction("Index", "Home");
+                return RedirectToAction("Login", "Account");
             }
             return View(model);
         }
