@@ -12,57 +12,55 @@ namespace BL.Services
 {
     public class MaterialService : IMaterialService
     {
-        public IUnitOfWork _unitOfWork;
+        public readonly IUnitOfWork _unitOfWork;
+        private readonly Mapper _automapper;
 
+        //public MaterialService(IUnitOfWork unitOfWork, Mapper automapper)
         public MaterialService()
         {
             _unitOfWork = new UnitOfWork();
+            var myProfile = new AutomapperProfile();
+            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
+            _automapper = new Mapper(configuration);
         }
 
         public Task AddAsync(MaterialDTO materialDTO)
         {
-            Material material = new Material
-            {
-                Name        = materialDTO.Name,
-                Content    = materialDTO.Content,
-                DateCreate = materialDTO.DateCreate,
-            };
-
+            Material material = _automapper.Map<MaterialDTO, Material>(materialDTO);
             _unitOfWork.Materials.CreateAsync(material);
             return Task.FromResult(_unitOfWork.SaveAsync());
         }
 
         public IEnumerable<MaterialDTO> GetMaterials()
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Material, MaterialDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<Material>, List<MaterialDTO>>(_unitOfWork.Materials.GetAll());
+            IEnumerable<Material> allMaterials = _unitOfWork.Materials.GetAll();
+            return _automapper.Map<IEnumerable<Material>, IEnumerable<MaterialDTO>>(allMaterials);
         }
 
         public Task<MaterialDTO> GetByIdAsync(Guid id)
         {
-            var material = _unitOfWork.Materials.GetAsync(id).Result;
-            return Task.FromResult(new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, });
+            Material material = _unitOfWork.Materials.GetAsync(id).Result;
+            return Task.FromResult(_automapper.Map<Material, MaterialDTO>(material));
         }
 
         public Task UpdateAsync(MaterialDTO materialDTO)
         {
-
             Material dbEntry = _unitOfWork.Materials.FindAsync(materialDTO.Id).Result;
             if (dbEntry != null)
             {
-                dbEntry.Name        = materialDTO.Name;
-                dbEntry.Content    = materialDTO.Content;
-                dbEntry.DateCreate       = materialDTO.DateCreate;
+                dbEntry.Name = materialDTO.Name;
+                dbEntry.Content = materialDTO.Content;
+                dbEntry.DateCreate = materialDTO.DateCreate;
             }
-            _unitOfWork.Materials.Update(dbEntry);
+            //Material materail = _automapper.Map<MaterialDTO, Material>(materialDTO);
+            //_unitOfWork.Materials.Update(materail);
             return Task.FromResult(_unitOfWork.SaveAsync());
         }
 
         public Task<MaterialDTO> FindByIdAsync(Guid id)
         {
-            var material = _unitOfWork.Materials.FindAsync(id).Result;
-            return Task.FromResult(new MaterialDTO { Id = material.Id, Name = material.Name, Content = material.Content, DateCreate = material.DateCreate, });
-
+            Material material = _unitOfWork.Materials.FindAsync(id).Result;
+            return Task.FromResult(_automapper.Map<Material, MaterialDTO>(material));
         }
 
         public Task DeleteByIdAsync(Guid id)
