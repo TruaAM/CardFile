@@ -44,7 +44,7 @@ namespace BL.Services
         }
 
         public Task UpdateAsync(MaterialDTO materialDTO)
-        {
+        {   
             Material dbEntry = _unitOfWork.Materials.FindAsync(materialDTO.Id).Result;
             if (dbEntry != null)
             {
@@ -52,8 +52,16 @@ namespace BL.Services
                 dbEntry.Content = materialDTO.Content;
                 dbEntry.DateCreate = materialDTO.DateCreate;
             }
-            //Material materail = _automapper.Map<MaterialDTO, Material>(materialDTO);
-            //_unitOfWork.Materials.Update(materail);
+            /// <problem>
+            /// InvalidOperationException: The instance of entity type 'Material' cannot be tracked because another instance with the key value 
+            /// '{Id: 6f0e8cd0-2a5c-4fd8-5c3d-08d908ade061}' is already being tracked. 
+            /// When attaching existing entities, ensure that only one entity instance with a given key value is attached.
+            /// </problem>
+            /// 
+            /// <code>
+            /// Material materail = _automapper.Map<MaterialDTO, Material>(materialDTO);
+            /// _unitOfWork.Materials.Update(materail);
+            /// </code>
             return Task.FromResult(_unitOfWork.SaveAsync());
         }
 
