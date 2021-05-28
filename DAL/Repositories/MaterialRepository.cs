@@ -28,14 +28,14 @@ namespace DAL.Repositories
 			return Task.FromResult(db.Materials.Find(id));
 		}
 
-		public Task CreateAsync(Material product)
+		public Task CreateAsync(Material material)
 		{
-			return Task.FromResult(db.Materials.Add(product));
+			return Task.FromResult(db.Materials.Add(material));
 		}
 
-		public void Update(Material product)
+		public void Update(Material material)
 		{
-			db.Entry(product).State = EntityState.Modified;
+			db.Entry(material).State = EntityState.Modified;
 		}
 
 		public Task<Material> FindAsync(Guid id)
