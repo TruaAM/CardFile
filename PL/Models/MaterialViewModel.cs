@@ -20,5 +20,9 @@ namespace PL.Models
 		[DataType(DataType.DateTime)]
 		public DateTime DateCreate { get; set; }
 
+		public IFormFile ImageIn { get; set; }
+
+		public byte[] Image { get; set; }
+
 	}
 }

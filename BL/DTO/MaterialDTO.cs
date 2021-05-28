@@ -13,5 +13,7 @@ namespace BL.DTO
 		public string Content { get; set; }
 
 		public DateTime DateCreate { get; set; }
+
+		public byte[] Image { get; set; }
 	}
 }

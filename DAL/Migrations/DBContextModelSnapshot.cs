@@ -65,6 +65,9 @@ namespace DAL.Migrations
                 b.Property<DateTime>("DateCreate")
                     .HasColumnType("datetime2(7)");
 
+                b.Property<byte[]>("Image")
+                    .HasColumnType("varbinary(MAX)");
+
                 b.HasKey("Id");
 
                 b.ToTable("Materials");

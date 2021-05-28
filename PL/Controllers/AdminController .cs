@@ -57,6 +57,17 @@ namespace PL.Controllers
                 //materialDto.DateCreate = DateTime.Now;
             }
 
+            if (materialViewModel.ImageIn != null)
+            {
+                byte[] imageData = null;
+                using (var binaryReader = new BinaryReader(materialViewModel.ImageIn.OpenReadStream()))
+                {
+                    imageData = binaryReader.ReadBytes((int)materialViewModel.ImageIn.Length);
+                }
+                materialViewModel.Image = imageData;
+                materialDto.Image = materialViewModel.Image;
+            }
+
             if (ModelState.IsValid)
             {
                 await _materialService.UpdateAsync(materialDto);
@@ -91,7 +102,19 @@ namespace PL.Controllers
                     //DateCreate = DateTime.Now,
                 };
 
-				materialDto.Id = Guid.NewGuid();
+                byte[] imageData = null;
+
+                if (materialViewModel.ImageIn != null)
+                {
+                    using (var binaryReader = new BinaryReader(materialViewModel.ImageIn.OpenReadStream()))
+                    {
+                        imageData = binaryReader.ReadBytes((int)materialViewModel.ImageIn.Length);
+                    }
+                }
+                materialViewModel.Image = imageData;
+                materialDto.Image = materialViewModel.Image;
+
+                materialDto.Id = Guid.NewGuid();
 
 				if (ModelState.IsValid)
 				{
