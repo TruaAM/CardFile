@@ -22,6 +22,8 @@
                 switch (property.PropertyName)
                 {
                     case "Id":
+                    case "Image":
+                    case "ImageIn":
                         break;
 
                     default:
@@ -42,6 +44,13 @@
                         break;
                 }
             }
+
+            <form asp-action="Create" asp-controller="Admin" method="post" enctype="multipart/form-data">
+                <p>
+                    <label>Add Image</label>
+                    <input name="ImageIn" type="file" class="form-control" />
+                </p>
+            </form>
 
             <div class="panel-footer">
                 <input type="submit" value="Add material" class="btn btn-primary" />

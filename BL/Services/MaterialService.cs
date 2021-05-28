@@ -51,6 +51,7 @@ namespace BL.Services
                 dbEntry.Name = materialDTO.Name;
                 dbEntry.Content = materialDTO.Content;
                 dbEntry.DateCreate = materialDTO.DateCreate;
+                dbEntry.Image = materialDTO.Image;
             }
             /// <problem>
             /// InvalidOperationException: The instance of entity type 'Material' cannot be tracked because another instance with the key value 
