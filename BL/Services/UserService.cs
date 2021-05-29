@@ -75,6 +75,8 @@ namespace BL.Services
                 throw new UserArgumentException("Password is not strong enough");
             }
 
+            userDTO.Password = _password.GetHashString(userDTO.Password);
+
             User user = _automapper.Map<UserDTO, User>(userDTO);
             _unitOfWork.Users.CreateAsync(user);
             return Task.FromResult(_unitOfWork.SaveAsync());

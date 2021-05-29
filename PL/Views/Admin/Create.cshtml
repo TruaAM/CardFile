@@ -4,8 +4,6 @@
     ViewBag.Title = "Admin panel: Add material";
 }
 
-<h1>Admin Panel</h1>
-
 <div class="panel">
 
     <div class="panel-heading">
@@ -54,10 +52,13 @@
 
             <div class="panel-footer">
                 <input type="submit" value="Add material" class="btn btn-primary" />
-                @Html.ActionLink("Cancel and back to list", "Index", null, new
+                
+                @using (Html.BeginForm("Index", "Admin"))
                 {
-                    @class = "btn btn-secondary"
-                })
+                    <input type="submit"
+                           class="btn btn-danger"
+                           value="Cancel and go back" />
+                }
             </div>
         </div>
     }

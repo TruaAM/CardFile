@@ -4,8 +4,6 @@
     ViewBag.Title = "Admin panel: Edit material";
 }
 
-<h1>Admin Panel</h1>
-
 <div class="panel">
 
     <div class="panel-heading">
@@ -46,7 +44,7 @@
             }
 
             <div>
-                @if (Model.Image.Length == 0)
+                @if (Model.Image == null || Model.Image.Length == 0)
                 {
                     <div class="form-control-static"><strong>No image</strong></div>
                 }
@@ -66,10 +64,13 @@
 
             <div class="panel-footer">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                @Html.ActionLink("Cancel changes and back to list", "Index", null, new
+
+                @using (Html.BeginForm("Index", "Admin"))
                 {
-                    @class = "btn btn-default"
-                })
+                    <input type="submit"
+                           class="btn btn-danger"
+                           value="Cancel and go back" />
+                }
             </div>
         </div>
     }
