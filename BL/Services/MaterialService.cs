@@ -13,12 +13,14 @@ namespace BL.Services
     public class MaterialService : IMaterialService
     {
         public readonly IUnitOfWork _unitOfWork;
+
         private readonly Mapper _automapper;
 
         //public MaterialService(IUnitOfWork unitOfWork, Mapper automapper)
         public MaterialService()
         {
             _unitOfWork = new UnitOfWork();
+
             var myProfile = new AutomapperProfile();
             var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
             _automapper = new Mapper(configuration);

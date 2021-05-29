@@ -20,28 +20,23 @@ namespace BL.Services
 
         private readonly IEmailService _email;
 
+        private readonly Mapper _automapper;
+
         public UserService()
         {    
             _unitOfWork = new UnitOfWork();
             _password = new PasswordService();
             _email = new EmailService();
+
+            var myProfile = new AutomapperProfile();
+            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
+            _automapper = new Mapper(configuration);
         }
 
-        public Task<UserDTO> GetUser(Guid id)
+        public Task<UserDTO> GetByIdAsync(Guid id)
         {
-            var user = _unitOfWork.Users.GetAsync(id).Result;
-
-            return Task.FromResult(new UserDTO
-            {
-                Name = user.Name,
-                Surname = user.Surname,
-                Role = user.Role,
-                Login = user.Login,
-                Email = user.Email,
-                Password = user.Password,
-                DateRegist = user.DateRegist
-            }
-            );
+            User user = _unitOfWork.Users.GetAsync(id).Result;
+            return Task.FromResult(_automapper.Map<User, UserDTO>(user));
         }
 
         public bool IsEmailFree(string email)
@@ -68,8 +63,8 @@ namespace BL.Services
 
         public IEnumerable<UserDTO> GetUsers()
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<User, UserDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<User>, List<UserDTO>>(_unitOfWork.Users.GetAll());
+            IEnumerable<User> allUsers = _unitOfWork.Users.GetAll();
+            return _automapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(allUsers);
         }     
 
         public Task SaveUser(UserDTO userDTO)
@@ -83,19 +78,8 @@ namespace BL.Services
                 throw new Exception("Pass not strong enough");
             }
 
-            User user = new User
-            {
-                Name = userDTO.Name,
-                Surname = userDTO.Surname,
-                Role = userDTO.Role,
-                Login = userDTO.Login,
-                Email = userDTO.Email,
-                Password = _password.GetHashString(userDTO.Password),
-                DateRegist = userDTO.DateRegist
-            };
-
+            User user = _automapper.Map<UserDTO, User>(userDTO);
             _unitOfWork.Users.CreateAsync(user);
-
             return Task.FromResult(_unitOfWork.SaveAsync());
         }
     }
