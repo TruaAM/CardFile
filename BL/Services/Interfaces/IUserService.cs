@@ -7,7 +7,7 @@ namespace BL.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<UserDTO> GetUser(Guid id);
+        Task<UserDTO> GetByIdAsync(Guid id);
 
         IEnumerable<UserDTO> GetUsers();
 
