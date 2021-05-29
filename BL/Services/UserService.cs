@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BL.DTO;
+using BL.Exceptions;
 using BL.Services.Interfaces;
 using Core.Enums;
 using Core.Models;
@@ -54,10 +55,6 @@ namespace BL.Services
         {
             IEnumerable<UserDTO> userDtos = GetUsers();
             UserDTO userDto = userDtos.Where(user => user.Email == email && user.Password == _password.GetHashString(password)).FirstOrDefault();
-            if (userDto != null)
-            {
-                return Task.FromResult(userDto);
-            }
             return Task.FromResult(userDto);
         }
 
@@ -71,11 +68,11 @@ namespace BL.Services
         {
             if (!_email.ValideEmail(userDTO.Email))
             {
-                throw new Exception("Invalide Email");
+                throw new UserArgumentException("Invalide Email");
             }
             if (_password.CheckPasswordStrength(userDTO.Password) < PasswordStrength.Medium)
             {
-                throw new Exception("Pass not strong enough");
+                throw new UserArgumentException("Password is not strong enough");
             }
 
             User user = _automapper.Map<UserDTO, User>(userDTO);
