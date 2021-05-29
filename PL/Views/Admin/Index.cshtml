@@ -21,7 +21,7 @@
             @foreach (var item in Model)
              {
                 <tr>
-                    <td>@Html.ActionLink(item.Name, "Edit", new { item.Id })</td>
+                    <td>@Html.ActionLink(item.Name, "Edit", new { item.Id }, FormMethod.Get)</td>
 
                     @if (item.Image.Length == 0)
                     {
@@ -51,7 +51,11 @@
     </div>
 
     <div class="panel-footer">
-        @Html.ActionLink("Add Materail", "Create", null,
-            new { @class = "btn btn-primary" })
+        @using (Html.BeginForm("Create", "Admin", FormMethod.Get))
+        {
+            <input type="submit"
+                   class="btn btn-primary"
+                   value="Add Material" />
+        }
     </div>
 </div>
