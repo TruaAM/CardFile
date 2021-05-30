@@ -4,64 +4,68 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3>Users</h3>
-    </div>
-    <div class="panel-body">
-        <table class="table table-striped table-condensed table-bordered">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Surname)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Role)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Login)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Email)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Password)
-                </th>
-            </tr>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Surname)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Role)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Login)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Password)
-                    </td>
-                </tr>
-            }
-        </table>
-    </div>
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3>Users</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-condensed table-bordered">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Surname)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Role)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Login)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Password)
+                        </th>
+                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Surname)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Role)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Login)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Password)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
 
-    <div class="panel-footer">
-        @using (Html.BeginForm("Create", "Users", FormMethod.Get))
-        {
-            <input type="submit"
-                   class="btn btn-primary"
-                   value="Add User" />
-        }
+            <div class="panel-footer">
+                @using (Html.BeginForm("Create", "Users", FormMethod.Get))
+                {
+                    <input type="submit"
+                           class="btn btn-primary"
+                           value="Add User" />
+                }
+            </div>
+        </div>
     </div>
 </div>

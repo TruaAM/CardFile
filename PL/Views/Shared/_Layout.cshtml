@@ -14,7 +14,7 @@
         <div class="alert alert-success">@TempData["message"]</div>
     }
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Card Files</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -61,19 +61,23 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-            @*@section Scripts
-            {
-                <partial name="_ValidationScriptsPartial" />
-            }*@
-        </main>
-    </div>
+        
+    <main role="main" class="pb-3">
+        @RenderBody()
+        @*@section Scripts
+        {
+            <partial name="_ValidationScriptsPartial" />
+        }*@
+    </main>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - Web project topic: Card file of text materials - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <p class="float-right">
+                <a href="#">Back to top</a>
+            </p>
+            <p>
+                &copy; 2021 - Web project topic: Card file of text materials - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </p>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
