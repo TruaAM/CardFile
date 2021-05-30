@@ -1,24 +1,26 @@
 ﻿@model PL.Models.LoginModel
 
-<h2>Enter site</h2>
-
-<a asp-action="Register" asp-controller="Account">Registration</a>
-
-<form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
+<form class="form-signin" asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
+    <h1 class="h3 mb-3 font-weight-normal">Please log in</h1>
     <div class="validation" asp-validation-summary="All"></div>
     <div>
         <div class="form-group">
-            <label asp-for="Email">Input Email</label>
+            <label asp-for="Email">Input Email</label><br />
             <input type="text" asp-for="Email" />
             <span asp-validation-for="Email" />
         </div>
         <div class="form-group">
-            <label asp-for="Password">Input password</label>
+            <label asp-for="Password">Input password</label><br />
             <input asp-for="Password" />
             <span asp-validation-for="Password" />
         </div>
+        <div class="checkbox mb-3">
+            <label>
+                Don't have an account yet? <a asp-action="Register" asp-controller="Account">Register now</a>
+            </label>
+        </div>
         <div class="form-group">
-            <input type="submit" value="Enter" class="btn btn-outline-dark" />
+            <input type="submit" value="Sign in" class="btn btn-primary" />
         </div>
     </div>
 </form>

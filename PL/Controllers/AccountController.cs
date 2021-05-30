@@ -35,7 +35,7 @@ namespace PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _userService.GetUserLog(model.Email, model.Password).Result;
+                var user = _userService.GetUserLog(model.Email.Trim(), model.Password).Result;
                 if (user != null)
                 {
                     await Authenticate(user);

@@ -7,9 +7,11 @@ using BL.Services.Interfaces;
 using BL.DTO;
 using AutoMapper;
 using PL.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PL.Controllers
 {
+    [Authorize(Roles = "admin, user")]
     public class MaterialsController : Controller
     {
         IMaterialService _materialService;

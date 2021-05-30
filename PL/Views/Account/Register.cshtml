@@ -1,42 +1,41 @@
 ﻿@model PL.Models.RegisterModel
 
-<h2>Registration</h2>
-
 <form asp-action="Register" asp-controller="Account" asp-anti-forgery="true">
+    <h1 class="h3 mb-3 font-weight-normal">Registration</h1>
     <div class="validation" asp-validation-summary="All"></div>
     <div>
-        <div>
+        <div class="form-group">
             <label asp-for="Email">Input Email</label><br />
             <input type="text" asp-for="Email" />
             <span asp-validation-for="Email" />
         </div>
-        <div>
+        <div class="form-group">
             <label asp-for="Password">Input password</label><br />
             <input asp-for="Password" />
             <span asp-validation-for="Password" />
         </div>
-        <div>
+        <div class="form-group">
             <label asp-for="ConfirmPassword">Repeat password</label><br />
             <input asp-for="ConfirmPassword" />
             <span asp-validation-for="ConfirmPassword" />
         </div>
-        <div>
+        <div class="form-group">
             <label asp-for="Login">Input Login</label><br />
             <input type="text" asp-for="Login" />
             <span asp-validation-for="Login" />
         </div>
-        <div>
+        <div class="form-group">
             <label asp-for="Name">Input Name</label><br />
             <input type="text" asp-for="Name" />
             <span asp-validation-for="Name" />
         </div>
-        <div>
+        <div class="form-group">
             <label asp-for="Surname">Input Surname</label><br />
             <input type="text" asp-for="Surname" />
             <span asp-validation-for="Surname" />
         </div>
-        <div>
-            <input type="submit" value="Registrate" />
+        <div class="form-group">
+            <input type="submit" value="Registrate" class="btn btn-primary" />
         </div>
     </div>
 </form>
