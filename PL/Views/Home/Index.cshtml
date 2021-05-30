@@ -1,9 +1,75 @@
-﻿@{
+﻿@model IEnumerable<PL.Models.UserDetailsViewModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <p>Current user name: @User.Identity.Name</p>
-    <p>Authentication type: @User.Identity.AuthenticationType</p>
-    <p>Is user authenticated? @User.Identity.IsAuthenticated</p>
+<!--
+<p>Current user id: @User.Identity.Name</p>
+<p>Authentication type: @User.Identity.AuthenticationType</p>
+<p>Is user authenticated? @User.Identity.IsAuthenticated</p>
+-->
+<section class="jumbotron text-center">
+    <div class="container">
+        <h2 class="jumbotron-heading">Card file of text materials </h2>
+        <p class="lead text-muted">
+            This project was created as the final project for training course .NET Winter Program initiated by EPAM to test skills of one its candidate.
+            Next technologies were used: ASP .NET MVC (.NET Framework), Entity Framework Code, html, css, js, Bootstrap.
+        </p>
+    </div>
+</section>
+
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            @if (User.IsInRole("admin"))
+            {
+                <div class="col-md-6">
+                    <div class="card mb-6 box-shadow">
+                        <div class="card-body">
+                            <p class="card-text">
+                                You are authenticated and you are admin. This means that you can manipulate with cards and also add new users to the system.
+                                For example, you can add them as admins already.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (User.IsInRole("user"))
+            {
+                <div class="col-md-6">
+                    <div class="card mb-6 box-shadow">
+                        <div class="card-body">
+                            <p class="card-text">
+                                You are an authenticated user. This means that you can see cards on this site but you can't manipulate them (add, delete, edit).
+                                You could get more if your role was "admin".
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-6">
+                    <div class="card mb-6 box-shadow">
+                        <div class="card-body">
+                            <p class="card-text">
+                                You are not an authenticated user. This means that you don't have access to the most of functionalities on this site.
+                                Registrate and login to get more access.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="col-md-6">
+                <div class="card mb-6 box-shadow">
+                    <div class="card-body">
+                        <p class="card-text">
+                            Card files is a collection of cards containing data or records. On this site - it is a collection of tables that contain
+                            variety types of information: text, dates and images.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -4,74 +4,78 @@
     ViewBag.Title = "Admin panel: Edit material";
 }
 
-<div class="panel">
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="panel">
 
-    <div class="panel-heading">
-        <h3>Edit material «@Model.Name»</h3>
-    </div>
+            <div class="panel-heading">
+                <h3>Edit material «@Model.Name»</h3>
+            </div>
 
-    @using (Html.BeginForm("Edit", "Admin",
-       FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        <div class="panel-body">
-            @Html.HiddenFor(m => m.Id)
-            @foreach (var property in ViewData.ModelMetadata.Properties)
+            @using (Html.BeginForm("Edit", "Admin",
+            FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
-                switch (property.PropertyName)
-                {
-                    case "Id":
-                    case "Image":
-                    case "ImageIn":
-                        break;
+                <div class="panel-body">
+                    @Html.HiddenFor(m => m.Id)
+                    @foreach (var property in ViewData.ModelMetadata.Properties)
+                    {
+                        switch (property.PropertyName)
+                        {
+                            case "Id":
+                            case "Image":
+                            case "ImageIn":
+                                break;
 
-                    default:
-                        <div class="form-group">
-                            <label>@(property.DisplayName ?? property.PropertyName)</label>
-                            @if (property.PropertyName == "Description")
-                            {
-                                @Html.TextArea(property.PropertyName, null,
-                                 new { @class = "form-control", rows = 5 })
-                            }
-                            else
-                            {
-                                @Html.TextBox(property.PropertyName, null,
-                                 new { @class = "form-control" })
-                            }
-                            <strong>@Html.ValidationMessage(property.PropertyName)</strong>
-                        </div>
-                        break;
-                }
-            }
+                            default:
+                                <div class="form-group">
+                                    <label>@(property.DisplayName ?? property.PropertyName)</label>
+                                    @if (property.PropertyName == "Description")
+                                    {
+                                        @Html.TextArea(property.PropertyName, null,
+                                         new { @class = "form-control", rows = 5 })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBox(property.PropertyName, null,
+                                         new { @class = "form-control" })
+                                    }
+                                    <strong>@Html.ValidationMessage(property.PropertyName)</strong>
+                                </div>
+                                break;
+                        }
+                    }
 
-            <div>
-                @if (Model.Image == null || Model.Image.Length == 0)
-                {
-                    <div class="form-control-static"><strong>No image</strong></div>
-                }
-                else
-                {
-                    <img style='width:80px; height:60px;' src="data:image/jpeg;base64,
+                    <div>
+                        @if (Model.Image == null || Model.Image.Length == 0)
+                        {
+                            <div class="form-control-static"><strong>No image</strong></div>
+                        }
+                        else
+                        {
+                            <img style='width:80px; height:60px;' src="data:image/jpeg;base64,
                          @(Convert.ToBase64String(Model.Image))" />
-                }
+                        }
 
-                <form asp-action="Edit" asp-controller="Admin" method="post" enctype="multipart/form-data">
-                    <p>
-                        <label>Add New Image</label>
-                        <input name="ImageIn" type="file" class="form-control" />
-                    </p>
-                </form>
-            </div>
+                        <form asp-action="Edit" asp-controller="Admin" method="post" enctype="multipart/form-data">
+                            <p>
+                                <label>Add New Image</label>
+                                <input name="ImageIn" type="file" class="form-control" />
+                            </p>
+                        </form>
+                    </div>
 
-            <div class="panel-footer">
-                <input type="submit" value="Save" class="btn btn-primary" />
-
-                @using (Html.BeginForm("Index", "Admin"))
-                {
-                    <input type="submit"
-                           class="btn btn-danger"
-                           value="Cancel and go back" />
-                }
-            </div>
+                    <div class="panel-footer">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        <p></p>
+                        @using (Html.BeginForm("Index", "Admin"))
+                        {
+                            <input type="submit"
+                                   class="btn btn-danger"
+                                   value="Cancel and go back" />
+                        }
+                    </div>
+                </div>
+            }
         </div>
-    }
+    </div>
 </div>

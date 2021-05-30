@@ -4,52 +4,56 @@
     ViewBag.Title = "Index";
 }
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3>Materials</h3>
-    </div>
-    <div class="panel-body">
-        <table class="table table-striped table-condensed table-bordered">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Image)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Content)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateCreate)
-                </th>
-            </tr>
-
-            @if (Model != null)
-            {
-                @foreach (var item in Model)
-                {
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3>Materials</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-condensed table-bordered">
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        @if (item.Image.Length == 0)
-                        {
-                            <td class="text-left">Image is coming soon</td>
-                        }
-                        else
-                        {
-                            <td><img style='width:240px; height:180px;' src="data:image/jpeg;base64,@(Convert.ToBase64String(item.Image))" /></td>
-                        }
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Content)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateCreate)
-                        </td>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Image)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Content)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DateCreate)
+                        </th>
                     </tr>
-                }
-            }
-        </table>
+
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                @if (item.Image.Length == 0)
+                                {
+                                    <td class="text-left">Image is coming soon</td>
+                                }
+                                else
+                                {
+                                    <td><img style='width:240px; height:180px;' src="data:image/jpeg;base64,@(Convert.ToBase64String(item.Image))" /></td>
+                                }
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Content)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateCreate)
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
     </div>
 </div>

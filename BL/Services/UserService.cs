@@ -42,6 +42,7 @@ namespace BL.Services
 
         public bool IsEmailFree(string email)
         {
+            email = email.Trim();
             IEnumerable<UserDTO> userDtos = GetUsers();
             UserDTO userDto = userDtos.Where(user => user.Email == email).FirstOrDefault();
             if (userDto != null)
