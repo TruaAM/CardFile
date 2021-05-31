@@ -5,6 +5,7 @@ using PL.Models;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace PL.Controllers
 {
@@ -105,7 +106,8 @@ namespace PL.Controllers
                     Role       = model.Role,
                     Login      = model.Login,
                     Email      = model.Email, 
-                    Password   = model.Password, 
+                    Password   = model.Password,
+                    DateRegist = DateTime.Now,
                 };
 
                 _userService.SaveUser(userDto);
