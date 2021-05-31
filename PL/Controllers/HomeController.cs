@@ -6,6 +6,9 @@ using System.Diagnostics;
 
 namespace PL.Controllers
 {
+    /// <summary>
+    /// This controller is first to be reprisented
+    /// </summary>
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -15,12 +18,17 @@ namespace PL.Controllers
             _logger = logger;
         }
 
-        //[Authorize]
+        /// <summary>
+        /// This method returns view of Home(index)
+        /// </summary>
         public IActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// This method returns view of Home(privace) but only if you are authenticated
+        /// </summary>
         [Authorize]
         public IActionResult Privacy()
         {

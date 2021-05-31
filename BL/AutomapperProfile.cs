@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using BL.DTO;
 using Core.Models;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BL
 {
+    /// <summary>
+    /// Custom automapper for business layer to transfer data from DTO models to CORE models
+    /// </summary>
     public class AutomapperProfile : Profile
     {
         public AutomapperProfile()

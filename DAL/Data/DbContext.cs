@@ -5,6 +5,9 @@ using System.IO;
 
 namespace DAL.Data
 {
+    /// <summary>
+	/// DBContext specify context of data that is used to interact with database
+	/// </summary>
     public class DBContext : DbContext
     {
         private readonly string _conStr;

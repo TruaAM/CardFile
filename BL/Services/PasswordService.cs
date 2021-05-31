@@ -7,8 +7,14 @@ using System.Text;
 
 namespace BL.Services
 {
+    /// <summary>
+    /// Service to check emails
+    /// </summary>
     public class PasswordService : IPasswordService
     {
+        /// <summary>
+        /// Method that will return the strength level of given password
+        /// </summary>
         public PasswordStrength CheckPasswordStrength(string password)
         {
             int score = 0;
@@ -31,27 +37,33 @@ namespace BL.Services
             return result;
         }
 
+        /// <summary>
+        /// Hashing password
+        /// </summary>
         public string GetHashString(string password)
         {
-            //переводим строку в байт-массим  
+            //convert string in byte array
             byte[] bytes = Encoding.Unicode.GetBytes(password);
 
-            //создаем объект для получения средст шифрования  
+            //create object to get hash resources
             MD5CryptoServiceProvider CSP =
                 new MD5CryptoServiceProvider();
 
-            //вычисляем хеш-представление в байтах  
+            //compute hash in bytes  
             byte[] byteHash = CSP.ComputeHash(bytes);
 
             string hash = string.Empty;
 
-            //формируем одну цельную строку из массива  
+            //create one string from array
             foreach (byte b in byteHash)
                 hash += string.Format("{0:x2}", b);
 
             return hash;
         }
 
+        /// <summary>
+        /// Method to check if given password is strong
+        /// </summary>
         public bool IsPasswordStrong(string password)
         {
             if (CheckPasswordStrength(password) < PasswordStrength.Medium)

@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace BL.Services
 {
+    /// <summary>
+    /// Service for manipulation with data of users
+    /// </summary>
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -34,12 +37,18 @@ namespace BL.Services
             _automapper = new Mapper(configuration);
         }
 
+        /// <summary>
+        /// Method to get user by id from datalayer
+        /// </summary>
         public Task<UserDTO> GetByIdAsync(Guid id)
         {
             User user = _unitOfWork.Users.GetAsync(id).Result;
             return Task.FromResult(_automapper.Map<User, UserDTO>(user));
         }
 
+        /// <summary>
+        /// Method to check if there users with the same given email
+        /// </summary>
         public bool IsEmailFree(string email)
         {
             email = email.Trim();
@@ -50,8 +59,11 @@ namespace BL.Services
                 return false;
             }
             return true;
-        }       
+        }
 
+        /// <summary>
+        /// Method has to find user with same email and hashed password
+        /// </summary>
         public Task<UserDTO> GetUserLog(string email, string password)
         {
             IEnumerable<UserDTO> userDtos = GetUsers();
@@ -59,12 +71,18 @@ namespace BL.Services
             return Task.FromResult(userDto);
         }
 
+        /// <summary>
+        /// Method to get users from datalayer
+        /// </summary>
         public IEnumerable<UserDTO> GetUsers()
         {
             IEnumerable<User> allUsers = _unitOfWork.Users.GetAll();
             return _automapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(allUsers);
-        }     
+        }
 
+        /// <summary>
+        /// Method to transfer new user in datalayer
+        /// </summary>
         public Task SaveUser(UserDTO userDTO)
         {
             if (!_email.ValideEmail(userDTO.Email))
