@@ -11,15 +11,23 @@ using System.Threading.Tasks;
 
 namespace PL.Controllers
 {
+    /// <summary>
+    /// This controller is for admins only.
+    /// Contains all functionality to add, delete, edit materials
+    /// </summary>
     [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
-        IMaterialService _materialService;
+        private readonly IMaterialService _materialService;
 
         public AdminController(IMaterialService serv)
         {
             _materialService = serv;
         }
+
+        /// <summary>
+        /// This method fill table with materials, if they exist, from business layer
+        /// </summary>
         public IActionResult Index()
         {
             IEnumerable<MaterialDTO> materialDtos = _materialService.GetMaterials();
@@ -36,6 +44,9 @@ namespace PL.Controllers
             }
         }
 
+        /// <summary>
+        /// This method returns material's data in edit view
+        /// </summary>
         public ViewResult Edit(Guid Id)
         {
             MaterialDTO materialDto = _materialService.FindByIdAsync(Id).Result;
@@ -44,6 +55,9 @@ namespace PL.Controllers
             return View(material);
         }
 
+        /// <summary>
+        /// This method sends new data for chosen material in business layer
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult> Edit(MaterialViewModel materialViewModel)
         {
@@ -81,6 +95,9 @@ namespace PL.Controllers
             }
         }
 
+        /// <summary>
+        /// This method create new material to be filled with data
+        /// </summary>
         public ViewResult Create()
         {
             MaterialDTO materialDto = new MaterialDTO();
@@ -89,53 +106,50 @@ namespace PL.Controllers
             return View(material);
         }
 
+        /// <summary>
+        /// This method sends new data for new material in business layer
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult> Create(MaterialViewModel materialViewModel)
         {
-            try
+            MaterialDTO materialDto = new MaterialDTO
             {
-                MaterialDTO materialDto = new MaterialDTO
-                {
-                    Name = materialViewModel.Name,
-                    Content = materialViewModel.Content,
-                    DateCreate  = materialViewModel.DateCreate,
-                    //DateCreate = DateTime.Now,
-                };
+                Name = materialViewModel.Name,
+                Content = materialViewModel.Content,
+                DateCreate = materialViewModel.DateCreate,
+                //DateCreate = DateTime.Now,
+            };
 
-                byte[] imageData = null;
+            byte[] imageData = null;
 
-                if (materialViewModel.ImageIn != null)
+            if (materialViewModel.ImageIn != null)
+            {
+                using (var binaryReader = new BinaryReader(materialViewModel.ImageIn.OpenReadStream()))
                 {
-                    using (var binaryReader = new BinaryReader(materialViewModel.ImageIn.OpenReadStream()))
-                    {
-                        imageData = binaryReader.ReadBytes((int)materialViewModel.ImageIn.Length);
-                    }
+                    imageData = binaryReader.ReadBytes((int)materialViewModel.ImageIn.Length);
                 }
-                materialViewModel.Image = imageData;
-                materialDto.Image = materialViewModel.Image;
-
-                materialDto.Id = Guid.NewGuid();
-
-				if (ModelState.IsValid)
-				{
-                    await _materialService.AddAsync(materialDto);
-                    TempData["message"] = string.Format("The  \"{0}\" has been added", materialDto.Name);
-                    return View(materialViewModel);
-                    //return RedirectToAction("Index");
-			    }
-				else
-			    {
-				    return View(materialViewModel);
-			    }
-		    }
-
-            catch (/*Validation*/Exception ex)
-            {
-                //ModelState.AddModelError(ex.Property, ex.Message);
             }
-            return View(materialViewModel);
+            materialViewModel.Image = imageData;
+            materialDto.Image = materialViewModel.Image;
+
+            materialDto.Id = Guid.NewGuid();
+
+            if (ModelState.IsValid)
+            {
+                await _materialService.AddAsync(materialDto);
+                TempData["message"] = string.Format("The  \"{0}\" has been added", materialDto.Name);
+                return View(materialViewModel);
+                //return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(materialViewModel);
+            }
         }
 
+        /// <summary>
+        /// This method sends id of chosen material to business layer that is suppose to be deleted from database
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult> Delete(Guid id)
         {

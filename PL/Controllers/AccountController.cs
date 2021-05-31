@@ -11,11 +11,14 @@ using System;
 
 namespace PL.Controllers
 {
+    /// <summary>
+    /// This controller is for registration and login system.
+    /// </summary>
     public class AccountController : Controller
     {
-        IUserService _userService;
-        IPasswordService _password;
-        IEmailService _email;
+        private readonly IUserService _userService;
+        private readonly IPasswordService _password;
+        private readonly IEmailService _email;
 
         public AccountController(IUserService serv, IPasswordService password, IEmailService email)
         {
@@ -23,12 +26,19 @@ namespace PL.Controllers
             _password = password;
             _email = email;
         }
+
+        /// <summary>
+        /// This method returns view of loginModel
+        /// </summary>
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
+        /// <summary>
+        /// This method will send inputed data in business layer to log user
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
@@ -46,12 +56,18 @@ namespace PL.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// This method returns view of RegisterModel
+        /// </summary>
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
+        /// <summary>
+        /// This method will send inputed data in business layer to register user
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
@@ -103,6 +119,9 @@ namespace PL.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// This method will authenticate given user by using ClaimsIdentity
+        /// </summary>
         private async Task Authenticate(UserDTO user)
         {
             var claims = new List<Claim>
@@ -115,6 +134,9 @@ namespace PL.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 
+        /// <summary>
+        /// This method will unlog current user
+        /// </summary>
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

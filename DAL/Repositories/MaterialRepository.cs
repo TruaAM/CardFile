@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
+	/// <summary>
+	/// This repository has basic functionallity to manipulate with materials-table in database
+	/// It is needed to incapsulate logic of working with source of data
+	/// </summary>
 	public class MaterialRepository : IMaterialRepository
 	{
 		private DBContext db;

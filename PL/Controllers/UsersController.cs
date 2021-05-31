@@ -8,13 +8,17 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace PL.Controllers
 {
+    /// <summary>
+    /// This controller is for users and admins.
+    /// It allows you to see all materials stored in database
+    /// </summary>
     [Authorize(Roles = "admin")]
     public class UsersController : Controller
     {
-        IUserService _userService;
-        IPasswordService _password;
-        IEmailService _email;
-        IRoleService _role;
+        private readonly IUserService _userService;
+        private readonly IPasswordService _password;
+        private readonly IEmailService _email;
+        private readonly IRoleService _role;
 
         public UsersController(IUserService serv, IPasswordService passwordService, IEmailService emailService, IRoleService roleService)
         {
@@ -24,7 +28,9 @@ namespace PL.Controllers
             _role = roleService;
         }
 
-        
+        /// <summary>
+        /// This method fill table with users, if they exist, from business layer
+        /// </summary>
         public ActionResult Index()
         {
             IEnumerable<UserDTO> userDtos = _userService.GetUsers();
@@ -41,6 +47,9 @@ namespace PL.Controllers
             }
         }
 
+        /// <summary>
+        /// This method return view model for UsersModel to create
+        /// </summary>
         public ActionResult Create()
         {
             if (User.IsInRole("admin"))
@@ -53,6 +62,9 @@ namespace PL.Controllers
             }
         }
 
+        /// <summary>
+        /// This method sends new data for new user in business layer
+        /// </summary>
         [HttpPost]
         public ActionResult Create(UserDetailsViewModel model)
         {

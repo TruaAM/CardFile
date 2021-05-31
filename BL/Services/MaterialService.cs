@@ -10,6 +10,9 @@ using DAL.Repositories;
 
 namespace BL.Services
 {
+    /// <summary>
+    /// Service for manipulation with data of materials
+    /// </summary>
     public class MaterialService : IMaterialService
     {
         public readonly IUnitOfWork _unitOfWork;
@@ -26,6 +29,9 @@ namespace BL.Services
             _automapper = new Mapper(configuration);
         }
 
+        /// <summary>
+        /// Method to transfer new material in datalayer
+        /// </summary>
         public Task AddAsync(MaterialDTO materialDTO)
         {
             Material material = _automapper.Map<MaterialDTO, Material>(materialDTO);
@@ -33,18 +39,27 @@ namespace BL.Services
             return Task.FromResult(_unitOfWork.SaveAsync());
         }
 
+        /// <summary>
+        /// Method to get materials from datalayer
+        /// </summary>
         public IEnumerable<MaterialDTO> GetMaterials()
         {
             IEnumerable<Material> allMaterials = _unitOfWork.Materials.GetAll();
             return _automapper.Map<IEnumerable<Material>, IEnumerable<MaterialDTO>>(allMaterials);
         }
 
+        /// <summary>
+        /// Method to get material by id from datalayer
+        /// </summary>
         public Task<MaterialDTO> GetByIdAsync(Guid id)
         {
             Material material = _unitOfWork.Materials.GetAsync(id).Result;
             return Task.FromResult(_automapper.Map<Material, MaterialDTO>(material));
         }
 
+        /// <summary>
+        /// Method to transfer new data for existing material in datalayer
+        /// </summary>
         public Task UpdateAsync(MaterialDTO materialDTO)
         {   
             Material dbEntry = _unitOfWork.Materials.FindAsync(materialDTO.Id).Result;
@@ -68,12 +83,18 @@ namespace BL.Services
             return Task.FromResult(_unitOfWork.SaveAsync());
         }
 
+        /// <summary>
+        /// Method to find material by id in datalayer
+        /// </summary>
         public Task<MaterialDTO> FindByIdAsync(Guid id)
         {
             Material material = _unitOfWork.Materials.FindAsync(id).Result;
             return Task.FromResult(_automapper.Map<Material, MaterialDTO>(material));
         }
 
+        /// <summary>
+        /// Method to delete existing material by id from datalayer
+        /// </summary>
         public Task DeleteByIdAsync(Guid id)
         {
             _unitOfWork.Materials.DeleteByIdAsync(id);

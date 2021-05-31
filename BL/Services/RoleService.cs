@@ -7,8 +7,14 @@ using System.Text;
 
 namespace BL.Services
 {
+    /// <summary>
+    /// Service to check roles of current users
+    /// </summary>
     public class RoleService : IRoleService
     {
+        /// <summary>
+        /// Method that returns current role
+        /// </summary>
         public Role RoleSpecificator(string role)
         {
             int score = 0;
@@ -31,6 +37,9 @@ namespace BL.Services
             return result;
         }
 
+        /// <summary>
+        /// Check if current role is admin
+        /// </summary>
         public bool IsAdmin(string role)
         {
             if (RoleSpecificator(role) != Role.Admin)
@@ -40,6 +49,9 @@ namespace BL.Services
             return true;
         }
 
+        /// <summary>
+        /// Check if current role is user
+        /// </summary>
         public bool IsUser(string role)
         {
             if (RoleSpecificator(role) != Role.User)

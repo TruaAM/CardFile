@@ -1,14 +1,15 @@
-﻿using Core.Models;
-using DAL.Data;
+﻿using DAL.Data;
 using DAL.Interfaces;
-using System;
 using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
+    /// <summary>
+	/// This class is needed to simplify our work with difirent repositories
+	/// </summary>
     public class UnitOfWork : IUnitOfWork
     {
-        private DBContext _db;
+        private readonly DBContext _db;
         private UserRepository userRepository;
         private MaterialRepository materialRepository;
 
